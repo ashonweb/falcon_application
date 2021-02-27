@@ -138,6 +138,8 @@ const handlethirdchange =(fvalue,svalue,tvalue)=>{
 
 }
 const handlenumbers =(name,no)=>{
+    showsecondradio=false
+
     let obj = vehicles;
 let arr = obj;
 let copy = cloneDeep(arr);
@@ -239,13 +241,14 @@ const nj =(name,no)=>{
                 {#if showsecondradio}
                         { #each vehiclearray_modified_second as {name,total_no},i  }
                             <label>
+                                
                             <input type="radio" bind:group={selectedsecondradio} value={name} id={name} on:change={()=>handlesecondnumbers(name,total_no)} />{name} {total_no}
                             </label>
                         {/each}
                     {:else}
                         { #each vehiclearray_modified as {name,total_no},i  }
                             <label>
-                            <input type="radio" bind:group={selectedsecondradio} value={name} id={name} on:change={()=>handlesecondnumbers(name,total_no)} />{name}
+                            <input type="radio" bind:group={selectedsecondradio} value={name} id={name} on:change={()=>handlesecondnumbers(name,total_no)} />{name} {total_no}
                             </label>
                         {/each}
                 {/if}
