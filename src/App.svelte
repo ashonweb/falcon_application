@@ -1,5 +1,6 @@
 <script>
 	import { Router, Link, Route } from "svelte-routing";
+	import PlayGame from "./PlayGame.svelte";
 	import Play from "./Play.svelte";
 	export let url = "";
 
@@ -95,7 +96,7 @@
 				</Link>		
 			</div>
 		</Route>
-		<Route path='/find' component="{Play}"/>
+		<Route path='/find' component="{PlayGame}"/>
 
 </main>
 </Router>

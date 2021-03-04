@@ -1,6 +1,7 @@
 <script>
 import { onMount } from "svelte";
 import cloneDeep from 'clone-deep';
+console.log(process.env.client_id)
 let src = './Assests/j.jpg';
 let scoops = 1;
 
@@ -26,8 +27,18 @@ $: vehicles = [];
 $: selectedId = null;
 $: vehiclearray_modified=[];
 $: vehiclearray_modified_second=[];
+$: vehiclearray_modified_third=[];
+$: vehiclearray_modified_fourth=[];
+
+
 $: selectedsecondradio=null;
-$: showsecondradio=false
+$: selectedthirdradio=null;
+$: selectedfourthradio=null;
+
+$: showsecondradio=false;
+$: showthirdradio=false;
+$: showfourthradio=false
+
 
 onMount (async()=>{
     await fetch('https://findfalcone.herokuapp.com/planets')
@@ -66,7 +77,7 @@ const handlechange =(value)=>{
     selectedvaluesecond='';
     if(secondArray === undefined){
          secondArray = planets.filter(function( obj ) {
-        showseconddestination = true;
+        // showseconddestination = true;
     return obj.name !== value;
     });
     }
@@ -90,7 +101,8 @@ const handlesecondchange =(fvalue,svalue)=>{
 
     if(thirdArray === undefined){
         thirdArray = planets.filter(function( obj ) {
-        showthirddestination = true;
+            
+        // showthirddestination = true;
     return obj.name !== fvalue && obj.name !== svalue;
     });
     console.log(thirdArray)
@@ -116,7 +128,7 @@ const handlethirdchange =(fvalue,svalue,tvalue)=>{
 
     if(fourthArray === undefined){
         fourthArray = planets.filter(function( obj ) {
-        showfourthdestination = true;
+        // showfourthdestination = true;
     return obj.name !== fvalue && obj.name !== svalue && obj.name !== tvalue;
     });
     console.log(fourthArray)
@@ -146,7 +158,9 @@ let copy = cloneDeep(arr);
     console.log(copy)
    copy.filter(function (obj){
        if(obj.name === name)
-       obj.total_no = no-1
+       obj.total_no = no-1;
+        // showseconddestination = true;
+            showseconddestination=true
        return obj
    })
    vehiclearray_modified = copy
@@ -163,11 +177,62 @@ let copy = cloneDeep(arr);
     console.log(copy)
    copy.filter(function (obj){
        if(obj.name === name)
-       obj.total_no = no-1
+       if(obj.total_no === 0){
+        obj.total_no = 0;
+
+       }
+       else{
+        obj.total_no = no-1;
+
+       }       showthirddestination = true;
+
        return obj
    })
    vehiclearray_modified_second = copy
 }
+const handlethirdnumbers =(name,no)=>{
+    showthirdradio=true
+    console.log(name,no)
+    let obj = vehiclearray_modified_second;
+
+let arr = obj;
+let copy = cloneDeep(arr);
+    console.log(copy)
+   copy.filter(function (obj){
+       if(obj.name === name)
+       if(obj.total_no < 0){
+        obj.total_no = 0;
+
+       }
+       else{
+        obj.total_no = no-1;
+
+       }
+       showfourthdestination = true;
+
+       return obj
+   })
+   vehiclearray_modified_third = copy
+}
+
+
+const handlefourthnumbers =(name,no)=>{
+    showfourthradio=true
+    console.log(name,no)
+    let obj = vehiclearray_modified_third;
+
+let arr = obj;
+let copy = cloneDeep(arr);
+    console.log(copy)
+   copy.filter(function (obj){
+       if(obj.name === name)
+       obj.total_no = no-1;
+
+       return obj
+   })
+   vehiclearray_modified_fourth = copy
+}
+
 const nj =(name,no)=>{
     alert("kjkjkj")
 }
@@ -236,27 +301,46 @@ const nj =(name,no)=>{
                     {/each}
                 
                 {/if}
+
             </select> 
             {#if selectedvaluesecond !== ''}
                 {#if showsecondradio}
                         { #each vehiclearray_modified_second as {name,total_no},i  }
-                            <label>
-                                
-                            <input type="radio" bind:group={selectedsecondradio} value={name} id={name} on:change={()=>handlesecondnumbers(name,total_no)} />{name} {total_no}
+                                {#if total_no === 0}
+                                <label class='label'>
+
+                                <input type="radio" bind:group={selectedsecondradio} value={name} id={name} disabled  />{name} {total_no}
                             </label>
+                                {:else}
+                                <label class='label'>
+
+                                <input type="radio" bind:group={selectedsecondradio} value={name} id={name}  on:change={()=>handlesecondnumbers(name,total_no)} />{name} {total_no}
+                            </label>
+                                {/if}
+                           
                         {/each}
                     {:else}
-                        { #each vehiclearray_modified as {name,total_no},i  }
-                            <label>
-                            <input type="radio" bind:group={selectedsecondradio} value={name} id={name} on:change={()=>handlesecondnumbers(name,total_no)} />{name} {total_no}
-                            </label>
-                        {/each}
+                    <p>d</p>
+                        <!-- { #each vehiclearray_modified as {name,total_no},i  }
+                        {#if total_no === 0}
+                        <label class='label'>
+
+                        <input type="radio" bind:group={selectedsecondradio} value={name} id={name} disabled />{name} {total_no}
+                    </label>
+                        {:else}
+                        <label class='label'>
+
+                        <input type="radio" bind:group={selectedsecondradio} value={name} id={name}  on:change={()=>handlesecondnumbers(name,total_no)} />{name} {total_no}
+                    </label>
+                        {/if}
+                        {/each} -->
                 {/if}
             {/if}
        {/if}
       
     </div>
-      <!--  {#if showthirddestination}
+    <!-- <div>
+        {#if showthirddestination}
 
            <select bind:value={selectedvaluethird} on:change={()=>handlethirdchange(selectedvalue,selectedvaluesecond,selectedvaluethird)}>
             {#if Array.isArray(thirdArray)}
@@ -270,7 +354,26 @@ const nj =(name,no)=>{
                
             {/if}
         </select>  
+        {#if selectedvaluethird !== ''}
+        {#if showthirdradio }
+        { #each vehiclearray_modified_third as {name,total_no},i  }
+            <label>
+                
+            <input type="radio" bind:group={selectedthirdradio} value={name} id={name} on:change={()=>handlethirdnumbers(name,total_no)} />{name} {total_no}
+            </label>
+        {/each}
+    {:else}
+        { #each vehiclearray_modified_second as {name,total_no},i  }
+            <label>
+            <input type="radio" bind:group={selectedthirdradio} value={name} id={name} on:change={()=>handlethirdnumbers(name,total_no)} />{name} {total_no}
+            </label>
+        {/each}
+     {/if}
+         {/if}
        {/if}
+      
+    </div>
+       <div>
        {#if showfourthdestination}
 
            <select bind:value={selectedvaluefourth}>
@@ -284,8 +387,29 @@ const nj =(name,no)=>{
                 {/each}
                
             {/if}
-        </select>  
+        </select> 
+        
+        {#if selectedvaluefourth !== ''}
+       {#if showfourthradio }
+       { #each vehiclearray_modified_fourth as {name,total_no},i  }
+           <label>
+               
+           <input type="radio" bind:group={selectedfourthradio} value={name} id={name} on:change={()=>handlefourthnumbers(name,total_no)} />{name} {total_no}
+           </label>
+       {/each}
+   {:else}
+       { #each vehiclearray_modified_third as {name,total_no},i  }
+           <label>
+           <input type="radio" bind:group={selectedfourthradio} value={name} id={name} on:change={()=>handlefourthnumbers(name,total_no)} />{name} {total_no}
+           </label>
+       {/each}
+    {/if}
+        {/if}
+
+
        {/if}
+       
+    </div>
           -->
        
         <h1>Available Vehicles</h1>
