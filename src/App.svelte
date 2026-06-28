@@ -1,6 +1,7 @@
 <script>
   import { Router, Route } from 'svelte-routing';
   import Game     from './Game.svelte';
+  import Scanning from './Scanning.svelte';
   import Result   from './Result.svelte';
   import Briefing from './Briefing.svelte';
   import GameOver from './GameOver.svelte';
@@ -75,6 +76,7 @@
 
   <Route path="/briefing" component="{Briefing}" />
   <Route path="/find" component="{Game}" />
+  <Route path="/scanning" component="{Scanning}" />
   <Route path="/result" component="{Result}" />
   <Route path="/gameover" component="{GameOver}" />
 </Router>

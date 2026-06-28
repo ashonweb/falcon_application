@@ -140,7 +140,7 @@
       const found  = result.status === 'success';
       const score  = calculateScore(found, totalTime, elapsed, currentMission.timeLimit, $gameState.streak);
 
-      missionResult.set({ found, planet: result.planet_name, travelTime: totalTime, elapsedSeconds: elapsed, ...score });
+      missionResult.set({ found, planet: result.planet_name, travelTime: totalTime, elapsedSeconds: elapsed, searchedPlanets: selections.map(s => s.planet), ...score });
 
       if (found) {
         gameState.update(gs => {
@@ -158,7 +158,7 @@
         gameState.update(gs => ({ ...gs, lives: gs.lives - 1, streak: 0 }));
       }
 
-      navigate('/result');
+      navigate('/scanning');
     } catch (e) {
       fetchError = 'Mission launch failed. Please try again.';
       submitting = false;
@@ -207,8 +207,8 @@
   </symbol>
 </svg>
 
-<div class="page">
-  <header class="hdr">
+<div class="page" class:danger-mode={countdownDanger}>
+  <header class="hdr" class:hdr-danger={countdownDanger}>
     <div class="hdr-left">
       <a href="/briefing" class="back-link">← Briefing</a>
       <span class="mission-tag">Mission {$gameState.mission + 1} — {currentMission.name}</span>
@@ -395,9 +395,28 @@
     transition: color 0.3s;
   }
   .countdown-warn  .countdown-val { color: rgba(251,191,36,0.9); }
-  .countdown-danger .countdown-val { color: rgba(239,68,68,0.95); animation: blink 0.5s infinite; }
+  .countdown-danger .countdown-val { color: rgba(239,68,68,0.95); animation: blink 0.5s infinite, shake 0.25s ease-in-out infinite; }
 
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 33%{transform:translateX(-2px)} 66%{transform:translateX(2px)} }
+
+  /* Panic mode */
+  .danger-mode::after {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 999;
+    box-shadow: inset 0 0 0 rgba(239,68,68,0);
+    animation: danger-vignette 0.4s ease-in-out infinite;
+  }
+  @keyframes danger-vignette {
+    0%,100% { box-shadow: inset 0 0 40px rgba(239,68,68,0.0); }
+    50%      { box-shadow: inset 0 0 40px rgba(239,68,68,0.18); }
+  }
+  .hdr-danger {
+    animation: hdr-danger-pulse 0.4s ease-in-out infinite;
+  }
+  @keyframes hdr-danger-pulse {
+    0%,100% { border-bottom-color: rgba(239,68,68,0.15); }
+    50%      { border-bottom-color: rgba(239,68,68,0.55); }
+  }
 
   /* Timer */
   .timer { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }

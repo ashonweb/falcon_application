@@ -7,8 +7,17 @@
   const unsub = missionResult.subscribe(v => { result = v; });
   onDestroy(unsub);
 
-  $: found   = result && result.found;
+  $: found    = result && result.found;
   $: timedOut = result && result.timedOut;
+
+  const TAUNTS = [
+    'She was close. Very close.',
+    'You nearly had her.',
+    'One planet away, perhaps.',
+    'She\'s good. But so are you.',
+    'The galaxy is vast. She knows it well.',
+  ];
+  const taunt = TAUNTS[Math.floor(Math.random() * TAUNTS.length)];
   $: lives   = $gameState.lives;
   $: isGameOver = lives <= 0;
   $: hasNextMission = $gameState.mission < MISSIONS.length;
@@ -132,6 +141,7 @@
         <p class="detail">Mission clock ran out before you could deploy your fleet.</p>
       {:else}
         <p class="detail">The Queen was not on any of your searched planets. Regroup.</p>
+        <p class="taunt">{taunt}</p>
       {/if}
 
       <!-- Travel time -->
@@ -268,6 +278,14 @@
 
   .detail { font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.7; margin-bottom: 20px; }
   .planet { color: #c4b5fd; font-weight: 700; }
+
+  .taunt {
+    font-size: 12px;
+    font-style: italic;
+    color: rgba(255,255,255,0.22);
+    margin-top: -10px;
+    margin-bottom: 20px;
+  }
 
   /* Stats */
   .stat-row {
